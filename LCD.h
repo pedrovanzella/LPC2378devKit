@@ -2,9 +2,8 @@
 #define LCD_H
 
 //Configuração do display LCD
-#define LCD_RS (1<<25)
-#define LCD_EN (1<<24)
-#define LCD_RW (1<<30)
+#define LCD_RS (1<<2)
+#define LCD_EN (1<<3)
 #define LCD_DADO (0xFF)
 
 void LCDinit(void);

@@ -12,26 +12,26 @@ void espera(unsigned int t)
 void LCDcomando(int c)
 {
   FIO3PIN0 = c;
-  FIO4CLR = LCD_RS;
-  FIO4SET = LCD_EN;
-  FIO4CLR = LCD_EN;
+  FIO2CLR = LCD_RS;
+  FIO2SET = LCD_EN;
+  FIO2CLR = LCD_EN;
   espera(20);
 }
 
 void LCDputchar(int c)
 {
   FIO3PIN0 = c;
-  FIO4SET = LCD_RS;
-  FIO4SET = LCD_EN;
-  FIO4CLR = LCD_EN;
+  FIO2SET = LCD_RS;
+  FIO2SET = LCD_EN;
+  FIO2CLR = LCD_EN;
   espera(8);
 }
 
 void LCDinit(void)
 {
   FIO3DIR |= 0xff;	/* P3.0 a P3.7 como saidas (dados do LCD) */
-  FIO4DIR |= LCD_EN | LCD_RS | LCD_RW;
-  FIO4CLR = LCD_EN | LCD_RW;
+  FIO2DIR |= (LCD_RS | LCD_EN);
+  FIO2CLR = LCD_EN;
   espera(20);
   LCDcomando(0x38);
   LCDcomando(1);
@@ -57,7 +57,7 @@ void escreve_num(int num)
   int nd=0;
   if(num<0)
   {
-    LCDputchar('-'); num=-num; 
+    LCDputchar('-'); num=-num;
   }
   do	{
     digs[nd++]= (num % 10) + '0';
@@ -74,13 +74,13 @@ void escreve_float(float f)
   int num = (int) (f * 10); // Cast to int with one decimal point
   if(num < 0)
   {
-    LCDputchar('-'); num =- num; 
+    LCDputchar('-'); num =- num;
   }
   do	{
     digs[nd++]= (num % 10) + '0';
     num /= 10;
   } while(num);
-  while(nd--) 
+  while(nd--)
   {
     if(nd == 0)
     {
