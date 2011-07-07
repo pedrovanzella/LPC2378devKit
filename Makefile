@@ -8,7 +8,7 @@ SERIALDEV = /dev/tty.usbserial-A900fgvb
 CLOCKFREQ = 12000
 TARGET = termo
 MODULOS = main.o crt.o rtc.o LCD.o serial.o ad.o sensortemp.o timer.o
-TERMINAL = ltser
+TERMINAL = screen
 BAUDRATE=19200
 
 #Nome do compilador C, assembler e linker
@@ -19,7 +19,7 @@ AFLAGS  = -mapcs-32 -mcpu=arm7tdmi
 CFLAGS  = -Wall -O2 -mcpu=arm7tdmi-s -D BAUDRATE=$(BAUDRATE)
 LFLAGS  = -nostartfiles
 
-all: $(TARGET).hex
+all: $(TARGET).hex $(TARGET)r.hex
 
 #Converte arquivo elf para hex
 %.hex: %.elf
@@ -42,26 +42,11 @@ $(TARGET)r.elf: $(MODULOS)
 
 #Chama o terminal e executa o programa na RAM (necessita do mon23)
 tser: $(TARGET)r.hex
-	$(TERMINAL) $(SERIALDEV) b=$(BAUDRATE) $(TARGET)r.hex
-
-tseru: $(TARGET)r.hex
-	$(TERMINAL) /dev/ttyUSB0 b=$(BAUDRATE) $(TARGET)r.hex
+	$(TERMINAL) $(SERIALDEV) $(BAUDRATE) $(TARGET)r.hex
 
 # Use 'make isp' para programar a memoria flash
 isp: $(TARGET).hex
 	lpc21isp $(TARGET).hex $(SERIALDEV) $(BAUDRATE) $(CLOCKFREQ)
-ispu: $(TARGET).hex
-	lpc21isp $(TARGET).hex /dev/ttyUSB0 $(BAUDRATE) $(CLOCKFREQ)
-isp1: $(TARGET).hex
-	lpc21isp $(TARGET).hex com1 $(BAUDRATE) $(CLOCKFREQ)
-isp2: $(TARGET).hex
-	lpc21isp $(TARGET).hex com2 $(BAUDRATE) $(CLOCKFREQ)
-isp3: $(TARGET).hex
-	lpc21isp $(TARGET).hex com3 $(BAUDRATE) $(CLOCKFREQ)
-isp4: $(TARGET).hex
-	lpc21isp $(TARGET).hex com4 $(BAUDRATE) $(CLOCKFREQ)
-isp5: $(TARGET).hex
-	lpc21isp $(TARGET).hex com5 $(BAUDRATE) $(CLOCKFREQ)
 
 #Limpa, apagando os arquivos gerados pela compilacao
 clean:
