@@ -1,0 +1,5 @@
+This is a library of functions for a ARM devKit, based on a LPC2378 which I used in college.
+
+This was the code from my final project for my microcrontrollers class, and I am going to clean it up and post here, updated to the new board.
+
+Hope this is useful to someone.
